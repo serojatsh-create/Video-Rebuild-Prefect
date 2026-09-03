@@ -1,0 +1,15 @@
+{
+  "ffmpeg": "X:/path/to/ffmpeg.exe",
+  "ffprobe": "X:/path/to/ffprobe.exe",
+  "effect_analysis_python": "X:/path/to/effect-analysis/.venv/Scripts/python.exe",
+  "effect_analysis_project": "X:/path/to/effect-analysis",
+  "scene_python": "X:/path/to/effect-analysis/.venv/Scripts/python.exe",
+  "scene_worker": "X:/path/to/Video-Rebuild-Prefect/workers/scene_worker.py",
+  "person_python": "X:/path/to/Video-Rebuild-Prefect/runtimes/person_gpu/Scripts/python.exe",
+  "person_worker": "X:/path/to/Video-Rebuild-Prefect/workers/person_worker.py",
+  "person_model": "X:/path/to/models/yolo11n.pt",
+  "ocr_python": "X:/path/to/Video-Rebuild-Prefect/runtimes/ocr_gpu/Scripts/python.exe",
+  "ocr_worker": "X:/path/to/Video-Rebuild-Prefect/workers/ocr_worker.py",
+  "ocr_detection_model": "X:/path/to/models/PP-OCRv6_tiny_det",
+  "ocr_recognition_model": "X:/path/to/models/PP-OCRv6_tiny_rec"
+}

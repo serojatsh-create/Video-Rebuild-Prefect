@@ -1,0 +1,447 @@
+{
+  "$defs": {
+    "ExecutionCanvas": {
+      "properties": {
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        },
+        "fps": {
+          "exclusiveMinimum": 0,
+          "title": "Fps",
+          "type": "number"
+        },
+        "duration_frames": {
+          "exclusiveMinimum": 0,
+          "title": "Duration Frames",
+          "type": "integer"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "background_color": {
+          "minLength": 1,
+          "title": "Background Color",
+          "type": "string"
+        }
+      },
+      "required": [
+        "width",
+        "height",
+        "fps",
+        "duration_frames",
+        "duration_s",
+        "background_color"
+      ],
+      "title": "ExecutionCanvas",
+      "type": "object"
+    },
+    "ExecutionConstraints": {
+      "properties": {
+        "forbidden_effects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Effects",
+          "type": "array"
+        },
+        "allowed_primitives": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Primitives",
+          "type": "array"
+        }
+      },
+      "title": "ExecutionConstraints",
+      "type": "object"
+    },
+    "ExecutionLayer": {
+      "properties": {
+        "layer_id": {
+          "minLength": 1,
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "z_index": {
+          "default": 0,
+          "title": "Z Index",
+          "type": "integer"
+        },
+        "parent_layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Layer Id"
+        },
+        "mask_layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mask Layer Id"
+        },
+        "content": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "styling": {
+          "additionalProperties": true,
+          "title": "Styling",
+          "type": "object"
+        }
+      },
+      "required": [
+        "layer_id",
+        "kind"
+      ],
+      "title": "ExecutionLayer",
+      "type": "object"
+    },
+    "ExecutionOperation": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "start_frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Frame"
+        },
+        "end_frame": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exclusive local-frame endpoint.",
+          "title": "End Frame"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "easing": {
+          "default": "linear",
+          "title": "Easing",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "title": "Parameters",
+          "type": "object"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "evidence_absolute_frames": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Evidence Absolute Frames",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "tool",
+        "action",
+        "start_s",
+        "end_s"
+      ],
+      "title": "ExecutionOperation",
+      "type": "object"
+    },
+    "ExecutionSourceSpan": {
+      "properties": {
+        "start_frame": {
+          "minimum": 0,
+          "title": "Start Frame",
+          "type": "integer"
+        },
+        "end_frame": {
+          "description": "Exclusive source-frame endpoint.",
+          "exclusiveMinimum": 0,
+          "title": "End Frame",
+          "type": "integer"
+        },
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "start_frame",
+        "end_frame",
+        "start_s",
+        "end_s"
+      ],
+      "title": "ExecutionSourceSpan",
+      "type": "object"
+    },
+    "ImplementationStrategy": {
+      "enum": [
+        "jianying",
+        "svg",
+        "hybrid",
+        "html_svg",
+        "other"
+      ],
+      "title": "ImplementationStrategy",
+      "type": "string"
+    },
+    "ValidationTarget": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "expected": {
+          "title": "Expected"
+        },
+        "tolerance": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tolerance"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame"
+        },
+        "target_layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Layer Id"
+        },
+        "evidence_absolute_frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Absolute Frame"
+        }
+      },
+      "required": [
+        "name",
+        "metric",
+        "expected"
+      ],
+      "title": "ValidationTarget",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "segment_id": {
+      "title": "Segment Id",
+      "type": "string"
+    },
+    "strategy": {
+      "$ref": "#/$defs/ImplementationStrategy"
+    },
+    "router_version": {
+      "title": "Router Version",
+      "type": "string"
+    },
+    "canvas": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExecutionCanvas"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "source_span": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExecutionSourceSpan"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "constraints": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExecutionConstraints"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "layers": {
+      "items": {
+        "$ref": "#/$defs/ExecutionLayer"
+      },
+      "title": "Layers",
+      "type": "array"
+    },
+    "operations": {
+      "items": {
+        "$ref": "#/$defs/ExecutionOperation"
+      },
+      "title": "Operations",
+      "type": "array"
+    },
+    "validation_targets": {
+      "items": {
+        "$ref": "#/$defs/ValidationTarget"
+      },
+      "title": "Validation Targets",
+      "type": "array"
+    },
+    "fallbacks": {
+      "items": {
+        "$ref": "#/$defs/ImplementationStrategy"
+      },
+      "title": "Fallbacks",
+      "type": "array"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "segment_id",
+    "strategy",
+    "router_version"
+  ],
+  "title": "ExecutionPlan",
+  "type": "object"
+}

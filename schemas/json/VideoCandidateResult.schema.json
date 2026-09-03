@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "CandidateSegment": {
+      "properties": {
+        "segment_id": {
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/TimeSpan"
+        }
+      },
+      "required": [
+        "segment_id",
+        "span"
+      ],
+      "title": "CandidateSegment",
+      "type": "object"
+    },
+    "TimeSpan": {
+      "properties": {
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "start_frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Frame"
+        },
+        "end_frame": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Frame"
+        }
+      },
+      "required": [
+        "start_s",
+        "end_s"
+      ],
+      "title": "TimeSpan",
+      "type": "object"
+    },
+    "VideoMeta": {
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        },
+        "fps": {
+          "exclusiveMinimum": 0,
+          "title": "Fps",
+          "type": "number"
+        },
+        "frame_count": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame Count"
+        },
+        "avg_frame_rate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Avg Frame Rate"
+        },
+        "reported_frame_rate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reported Frame Rate"
+        },
+        "time_base": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Time Base"
+        },
+        "start_time_s": {
+          "default": 0.0,
+          "title": "Start Time S",
+          "type": "number"
+        },
+        "variable_frame_rate": {
+          "default": false,
+          "title": "Variable Frame Rate",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "duration_s",
+        "width",
+        "height",
+        "fps"
+      ],
+      "title": "VideoMeta",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "video": {
+      "$ref": "#/$defs/VideoMeta"
+    },
+    "shots": {
+      "items": {
+        "$ref": "#/$defs/TimeSpan"
+      },
+      "title": "Shots",
+      "type": "array"
+    },
+    "person_segments": {
+      "items": {
+        "$ref": "#/$defs/TimeSpan"
+      },
+      "title": "Person Segments",
+      "type": "array"
+    },
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/CandidateSegment"
+      },
+      "title": "Candidates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "video",
+    "shots",
+    "person_segments",
+    "candidates"
+  ],
+  "title": "VideoCandidateResult",
+  "type": "object"
+}

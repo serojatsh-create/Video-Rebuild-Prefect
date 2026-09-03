@@ -1,0 +1,43 @@
+# Python caches and local build products
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.test-temp/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local virtual environments and Prefect state
+.venv/
+venv/
+runtimes/
+.prefect/
+prefect.db
+
+# Generated runs, fixtures, previews, and application state
+runs/
+Ultralytics/
+
+# Downloaded binaries, model weights, archives, and caches
+# Keep downloads/manifests/ tracked as the reproducibility record.
+downloads/wheelhouse/
+downloads/pip-cache/
+downloads/archives/
+downloads/models/
+
+# Partial downloads and common editor/OS noise
+*.part
+*.tmp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Machine-specific tool locations and Codex temporary responses
+config/tools.local.json
+.*.codex-output.json

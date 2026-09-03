@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video-rebuild-prefect"
+version = "0.1.0"
+description = "Prefect-oriented contracts and adapters for reference-video reverse engineering"
+requires-python = ">=3.12"
+dependencies = [
+  "pydantic==2.13.4",
+  "prefect==3.7.8",
+]
+
+[project.scripts]
+video-rebuild-codex-analyze = "video_rebuild.visual_analysis_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

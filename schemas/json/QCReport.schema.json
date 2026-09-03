@@ -1,0 +1,87 @@
+{
+  "$defs": {
+    "GateStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "warn",
+        "skip"
+      ],
+      "title": "GateStatus",
+      "type": "string"
+    },
+    "QCDecision": {
+      "enum": [
+        "pass",
+        "retry",
+        "reroute",
+        "human_review",
+        "fail"
+      ],
+      "title": "QCDecision",
+      "type": "string"
+    },
+    "QCGateResult": {
+      "properties": {
+        "gate": {
+          "title": "Gate",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/GateStatus"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        }
+      },
+      "required": [
+        "gate",
+        "status",
+        "message"
+      ],
+      "title": "QCGateResult",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "segment_id": {
+      "title": "Segment Id",
+      "type": "string"
+    },
+    "gates": {
+      "items": {
+        "$ref": "#/$defs/QCGateResult"
+      },
+      "title": "Gates",
+      "type": "array"
+    },
+    "auto_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Auto Score",
+      "type": "number"
+    },
+    "decision": {
+      "$ref": "#/$defs/QCDecision"
+    },
+    "recommended_action": {
+      "title": "Recommended Action",
+      "type": "string"
+    }
+  },
+  "required": [
+    "segment_id",
+    "gates",
+    "auto_score",
+    "decision",
+    "recommended_action"
+  ],
+  "title": "QCReport",
+  "type": "object"
+}

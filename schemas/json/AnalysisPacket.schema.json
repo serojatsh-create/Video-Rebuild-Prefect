@@ -1,0 +1,628 @@
+{
+  "$defs": {
+    "AnalysisFrame": {
+      "properties": {
+        "frame_index": {
+          "minimum": 0,
+          "title": "Frame Index",
+          "type": "integer"
+        },
+        "pts_s": {
+          "minimum": 0,
+          "title": "Pts S",
+          "type": "number"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Roles",
+          "type": "array"
+        }
+      },
+      "required": [
+        "frame_index",
+        "pts_s",
+        "path",
+        "roles"
+      ],
+      "title": "AnalysisFrame",
+      "type": "object"
+    },
+    "AnalysisPacketEvidence": {
+      "properties": {
+        "ocr_device": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ocr Device"
+        },
+        "ocr_detection_model": {
+          "title": "Ocr Detection Model",
+          "type": "string"
+        },
+        "ocr_recognition_model": {
+          "title": "Ocr Recognition Model",
+          "type": "string"
+        },
+        "ocr_minimum_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Ocr Minimum Score",
+          "type": "number"
+        },
+        "object_device": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Object Device"
+        },
+        "object_model": {
+          "title": "Object Model",
+          "type": "string"
+        },
+        "coarse_samples_per_second": {
+          "exclusiveMinimum": 0,
+          "title": "Coarse Samples Per Second",
+          "type": "number"
+        },
+        "measurement_cache_hits": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "title": "Measurement Cache Hits",
+          "type": "object"
+        },
+        "timings_s": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Timings S",
+          "type": "object"
+        }
+      },
+      "required": [
+        "ocr_detection_model",
+        "ocr_recognition_model",
+        "ocr_minimum_score",
+        "object_model",
+        "coarse_samples_per_second"
+      ],
+      "title": "AnalysisPacketEvidence",
+      "type": "object"
+    },
+    "ChangeScore": {
+      "properties": {
+        "frame_index": {
+          "minimum": 0,
+          "title": "Frame Index",
+          "type": "integer"
+        },
+        "pts_s": {
+          "minimum": 0,
+          "title": "Pts S",
+          "type": "number"
+        },
+        "score": {
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "frame_index",
+        "pts_s",
+        "score"
+      ],
+      "title": "ChangeScore",
+      "type": "object"
+    },
+    "ChangeWindow": {
+      "properties": {
+        "start_frame": {
+          "minimum": 0,
+          "title": "Start Frame",
+          "type": "integer"
+        },
+        "end_frame": {
+          "minimum": 0,
+          "title": "End Frame",
+          "type": "integer"
+        },
+        "peak_frame": {
+          "minimum": 0,
+          "title": "Peak Frame",
+          "type": "integer"
+        },
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "minimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "peak_s": {
+          "minimum": 0,
+          "title": "Peak S",
+          "type": "number"
+        },
+        "peak_score": {
+          "minimum": 0,
+          "title": "Peak Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "start_frame",
+        "end_frame",
+        "peak_frame",
+        "start_s",
+        "end_s",
+        "peak_s",
+        "peak_score"
+      ],
+      "title": "ChangeWindow",
+      "type": "object"
+    },
+    "MotionObservation": {
+      "properties": {
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "start_frame": {
+          "minimum": 0,
+          "title": "Start Frame",
+          "type": "integer"
+        },
+        "end_frame": {
+          "exclusiveMinimum": 0,
+          "title": "End Frame",
+          "type": "integer"
+        },
+        "threshold": {
+          "minimum": 0,
+          "title": "Threshold",
+          "type": "number"
+        },
+        "frame_scores": {
+          "items": {
+            "$ref": "#/$defs/ChangeScore"
+          },
+          "title": "Frame Scores",
+          "type": "array"
+        },
+        "windows": {
+          "items": {
+            "$ref": "#/$defs/ChangeWindow"
+          },
+          "title": "Windows",
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "start_frame",
+        "end_frame",
+        "threshold"
+      ],
+      "title": "MotionObservation",
+      "type": "object"
+    },
+    "OCRFrameObservation": {
+      "properties": {
+        "input_path": {
+          "minLength": 1,
+          "title": "Input Path",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/OCRItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "input_path"
+      ],
+      "title": "OCRFrameObservation",
+      "type": "object"
+    },
+    "OCRItem": {
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "polygon": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Polygon",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "score",
+        "polygon"
+      ],
+      "title": "OCRItem",
+      "type": "object"
+    },
+    "ObjectFrameObservation": {
+      "properties": {
+        "input_path": {
+          "minLength": 1,
+          "title": "Input Path",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/ObjectItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "input_path"
+      ],
+      "title": "ObjectFrameObservation",
+      "type": "object"
+    },
+    "ObjectItem": {
+      "properties": {
+        "class_id": {
+          "minimum": 0,
+          "title": "Class Id",
+          "type": "integer"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "bbox": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "title": "Bbox",
+          "type": "array"
+        }
+      },
+      "required": [
+        "class_id",
+        "label",
+        "score",
+        "bbox"
+      ],
+      "title": "ObjectItem",
+      "type": "object"
+    },
+    "TimeSpan": {
+      "properties": {
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "start_frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Frame"
+        },
+        "end_frame": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Frame"
+        }
+      },
+      "required": [
+        "start_s",
+        "end_s"
+      ],
+      "title": "TimeSpan",
+      "type": "object"
+    },
+    "VideoMeta": {
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        },
+        "fps": {
+          "exclusiveMinimum": 0,
+          "title": "Fps",
+          "type": "number"
+        },
+        "frame_count": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame Count"
+        },
+        "avg_frame_rate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Avg Frame Rate"
+        },
+        "reported_frame_rate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reported Frame Rate"
+        },
+        "time_base": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Time Base"
+        },
+        "start_time_s": {
+          "default": 0.0,
+          "title": "Start Time S",
+          "type": "number"
+        },
+        "variable_frame_rate": {
+          "default": false,
+          "title": "Variable Frame Rate",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "duration_s",
+        "width",
+        "height",
+        "fps"
+      ],
+      "title": "VideoMeta",
+      "type": "object"
+    },
+    "VisualEvidencePurpose": {
+      "enum": [
+        "entrance",
+        "internal",
+        "exit",
+        "transition"
+      ],
+      "title": "VisualEvidencePurpose",
+      "type": "string"
+    },
+    "VisualEvidenceSequence": {
+      "properties": {
+        "sequence_id": {
+          "minLength": 1,
+          "title": "Sequence Id",
+          "type": "string"
+        },
+        "purpose": {
+          "$ref": "#/$defs/VisualEvidencePurpose"
+        },
+        "window": {
+          "$ref": "#/$defs/TimeSpan"
+        },
+        "sampling_fps": {
+          "exclusiveMinimum": 0,
+          "title": "Sampling Fps",
+          "type": "number"
+        },
+        "frames": {
+          "items": {
+            "$ref": "#/$defs/AnalysisFrame"
+          },
+          "minItems": 2,
+          "title": "Frames",
+          "type": "array"
+        },
+        "contact_sheet_path": {
+          "minLength": 1,
+          "title": "Contact Sheet Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence_id",
+        "purpose",
+        "window",
+        "sampling_fps",
+        "frames",
+        "contact_sheet_path"
+      ],
+      "title": "VisualEvidenceSequence",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "segment_id": {
+      "title": "Segment Id",
+      "type": "string"
+    },
+    "span": {
+      "$ref": "#/$defs/TimeSpan"
+    },
+    "context_span": {
+      "$ref": "#/$defs/TimeSpan"
+    },
+    "video": {
+      "$ref": "#/$defs/VideoMeta"
+    },
+    "frames": {
+      "items": {
+        "$ref": "#/$defs/AnalysisFrame"
+      },
+      "title": "Frames",
+      "type": "array"
+    },
+    "contact_sheet_path": {
+      "minLength": 1,
+      "title": "Contact Sheet Path",
+      "type": "string"
+    },
+    "ocr": {
+      "items": {
+        "$ref": "#/$defs/OCRFrameObservation"
+      },
+      "title": "Ocr",
+      "type": "array"
+    },
+    "objects": {
+      "items": {
+        "$ref": "#/$defs/ObjectFrameObservation"
+      },
+      "title": "Objects",
+      "type": "array"
+    },
+    "motion": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MotionObservation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "visual_sequences": {
+      "items": {
+        "$ref": "#/$defs/VisualEvidenceSequence"
+      },
+      "title": "Visual Sequences",
+      "type": "array"
+    },
+    "evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AnalysisPacketEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "segment_id",
+    "span",
+    "context_span",
+    "video",
+    "frames",
+    "contact_sheet_path",
+    "ocr",
+    "objects"
+  ],
+  "title": "AnalysisPacket",
+  "type": "object"
+}

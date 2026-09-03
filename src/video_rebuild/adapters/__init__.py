@@ -1,0 +1,2 @@
+"""External-process adapter boundaries."""
+

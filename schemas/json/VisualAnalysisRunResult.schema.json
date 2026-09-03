@@ -1,0 +1,835 @@
+{
+  "$defs": {
+    "AnalysisStatus": {
+      "enum": [
+        "complete",
+        "needs_ai",
+        "needs_human",
+        "failed"
+      ],
+      "title": "AnalysisStatus",
+      "type": "string"
+    },
+    "AnimationEffect": {
+      "enum": [
+        "hard_cut",
+        "fade",
+        "slide",
+        "scale",
+        "rotate",
+        "mask_reveal",
+        "wipe",
+        "type_on",
+        "blur",
+        "flash",
+        "morph",
+        "camera_push",
+        "camera_pan",
+        "hold",
+        "composite",
+        "unknown"
+      ],
+      "title": "AnimationEffect",
+      "type": "string"
+    },
+    "AnimationPhaseKind": {
+      "enum": [
+        "entrance",
+        "hold",
+        "internal",
+        "exit",
+        "transition"
+      ],
+      "title": "AnimationPhaseKind",
+      "type": "string"
+    },
+    "AnimationPhaseSpec": {
+      "properties": {
+        "phase_id": {
+          "minLength": 1,
+          "title": "Phase Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/AnimationPhaseKind"
+        },
+        "start_frame": {
+          "minimum": 0,
+          "title": "Start Frame",
+          "type": "integer"
+        },
+        "end_frame": {
+          "exclusiveMinimum": 0,
+          "title": "End Frame",
+          "type": "integer"
+        },
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "target_layer_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Target Layer Ids",
+          "type": "array"
+        },
+        "effect": {
+          "$ref": "#/$defs/AnimationEffect"
+        },
+        "direction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction"
+        },
+        "easing": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Easing"
+        },
+        "parameter_changes": {
+          "additionalProperties": true,
+          "title": "Parameter Changes",
+          "type": "object"
+        },
+        "evidence_sequence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Sequence Ids",
+          "type": "array"
+        },
+        "evidence_frame_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 2,
+          "title": "Evidence Frame Indices",
+          "type": "array"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "uncertainties": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Uncertainties",
+          "type": "array"
+        }
+      },
+      "required": [
+        "phase_id",
+        "kind",
+        "start_frame",
+        "end_frame",
+        "start_s",
+        "end_s",
+        "target_layer_ids",
+        "effect",
+        "evidence_sequence_ids",
+        "evidence_frame_indices",
+        "confidence"
+      ],
+      "title": "AnimationPhaseSpec",
+      "type": "object"
+    },
+    "EvidenceRef": {
+      "properties": {
+        "time_s": {
+          "minimum": 0,
+          "title": "Time S",
+          "type": "number"
+        },
+        "frame_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame Path"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "time_s",
+        "note"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "HumanReviewStatus": {
+      "enum": [
+        "pending",
+        "not_requested"
+      ],
+      "title": "HumanReviewStatus",
+      "type": "string"
+    },
+    "ImplementationSpec": {
+      "properties": {
+        "primary_tool": {
+          "$ref": "#/$defs/ReconstructionTool"
+        },
+        "layer_build_order": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Layer Build Order",
+          "type": "array"
+        },
+        "technical_steps": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Technical Steps",
+          "type": "array"
+        },
+        "required_effects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Effects",
+          "type": "array"
+        },
+        "fallback_tool": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReconstructionTool"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "test_points": {
+          "items": {
+            "$ref": "#/$defs/ValidationPoint"
+          },
+          "minItems": 1,
+          "title": "Test Points",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "primary_tool",
+        "layer_build_order",
+        "technical_steps",
+        "test_points"
+      ],
+      "title": "ImplementationSpec",
+      "type": "object"
+    },
+    "LayerKind": {
+      "enum": [
+        "background",
+        "video",
+        "image",
+        "text",
+        "logo",
+        "shape",
+        "chart",
+        "ui",
+        "subtitle",
+        "effect",
+        "3d",
+        "unknown"
+      ],
+      "title": "LayerKind",
+      "type": "string"
+    },
+    "LayerState": {
+      "properties": {
+        "frame_index": {
+          "minimum": 0,
+          "title": "Frame Index",
+          "type": "integer"
+        },
+        "time_s": {
+          "minimum": 0,
+          "title": "Time S",
+          "type": "number"
+        },
+        "x_norm": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "X Norm"
+        },
+        "y_norm": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Y Norm"
+        },
+        "width_norm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Norm"
+        },
+        "height_norm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Norm"
+        },
+        "scale_x": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scale X"
+        },
+        "scale_y": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scale Y"
+        },
+        "rotation_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rotation Deg"
+        },
+        "opacity": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opacity"
+        },
+        "visible": {
+          "default": true,
+          "title": "Visible",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "frame_index",
+        "time_s"
+      ],
+      "title": "LayerState",
+      "type": "object"
+    },
+    "MaterialKind": {
+      "enum": [
+        "video",
+        "raster_image",
+        "svg",
+        "text",
+        "logo",
+        "ui_capture",
+        "3d",
+        "generated",
+        "unknown"
+      ],
+      "title": "MaterialKind",
+      "type": "string"
+    },
+    "MaterialSpec": {
+      "properties": {
+        "material_id": {
+          "minLength": 1,
+          "title": "Material Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/MaterialKind"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "source_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Path"
+        },
+        "generation_notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Generation Notes"
+        },
+        "transparent_background": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transparent Background"
+        },
+        "evidence_frame_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Evidence Frame Indices",
+          "type": "array"
+        }
+      },
+      "required": [
+        "material_id",
+        "kind",
+        "description"
+      ],
+      "title": "MaterialSpec",
+      "type": "object"
+    },
+    "ReconstructionTool": {
+      "enum": [
+        "jianying",
+        "svg",
+        "html",
+        "ffmpeg",
+        "3d",
+        "hybrid",
+        "unknown"
+      ],
+      "title": "ReconstructionTool",
+      "type": "string"
+    },
+    "SegmentAnalysis": {
+      "properties": {
+        "segment_id": {
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/TimeSpan"
+        },
+        "status": {
+          "$ref": "#/$defs/AnalysisStatus"
+        },
+        "visual_summary": {
+          "title": "Visual Summary",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "uncertainties": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Uncertainties",
+          "type": "array"
+        },
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "analyzer": {
+          "default": "unavailable",
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "reconstruction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VisualReconstructionSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_packet_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Packet Path"
+        }
+      },
+      "required": [
+        "segment_id",
+        "span",
+        "status",
+        "visual_summary"
+      ],
+      "title": "SegmentAnalysis",
+      "type": "object"
+    },
+    "TimeSpan": {
+      "properties": {
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "start_frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Frame"
+        },
+        "end_frame": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Frame"
+        }
+      },
+      "required": [
+        "start_s",
+        "end_s"
+      ],
+      "title": "TimeSpan",
+      "type": "object"
+    },
+    "ValidationPoint": {
+      "properties": {
+        "frame_index": {
+          "minimum": 0,
+          "title": "Frame Index",
+          "type": "integer"
+        },
+        "time_s": {
+          "minimum": 0,
+          "title": "Time S",
+          "type": "number"
+        },
+        "expected_visible_layers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Visible Layers",
+          "type": "array"
+        },
+        "checks": {
+          "additionalProperties": true,
+          "title": "Checks",
+          "type": "object"
+        }
+      },
+      "required": [
+        "frame_index",
+        "time_s"
+      ],
+      "title": "ValidationPoint",
+      "type": "object"
+    },
+    "VisualLayerSpec": {
+      "properties": {
+        "layer_id": {
+          "minLength": 1,
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/LayerKind"
+        },
+        "z_index": {
+          "title": "Z Index",
+          "type": "integer"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content"
+        },
+        "styling": {
+          "additionalProperties": true,
+          "title": "Styling",
+          "type": "object"
+        },
+        "states": {
+          "items": {
+            "$ref": "#/$defs/LayerState"
+          },
+          "title": "States",
+          "type": "array"
+        },
+        "evidence_frame_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "title": "Evidence Frame Indices",
+          "type": "array"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "uncertainties": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Uncertainties",
+          "type": "array"
+        }
+      },
+      "required": [
+        "layer_id",
+        "name",
+        "kind",
+        "z_index",
+        "evidence_frame_indices",
+        "confidence"
+      ],
+      "title": "VisualLayerSpec",
+      "type": "object"
+    },
+    "VisualReconstructionSpec": {
+      "properties": {
+        "schema_version": {
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "content_category": {
+          "minLength": 1,
+          "title": "Content Category",
+          "type": "string"
+        },
+        "design_style": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Design Style",
+          "type": "array"
+        },
+        "composition": {
+          "minLength": 1,
+          "title": "Composition",
+          "type": "string"
+        },
+        "layers": {
+          "items": {
+            "$ref": "#/$defs/VisualLayerSpec"
+          },
+          "minItems": 1,
+          "title": "Layers",
+          "type": "array"
+        },
+        "phases": {
+          "items": {
+            "$ref": "#/$defs/AnimationPhaseSpec"
+          },
+          "minItems": 2,
+          "title": "Phases",
+          "type": "array"
+        },
+        "materials": {
+          "items": {
+            "$ref": "#/$defs/MaterialSpec"
+          },
+          "title": "Materials",
+          "type": "array"
+        },
+        "implementation": {
+          "$ref": "#/$defs/ImplementationSpec"
+        },
+        "unresolved_questions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unresolved Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "content_category",
+        "design_style",
+        "composition",
+        "layers",
+        "phases",
+        "implementation"
+      ],
+      "title": "VisualReconstructionSpec",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "analysis": {
+      "$ref": "#/$defs/SegmentAnalysis"
+    },
+    "human_review_required": {
+      "title": "Human Review Required",
+      "type": "boolean"
+    },
+    "review_status": {
+      "$ref": "#/$defs/HumanReviewStatus"
+    }
+  },
+  "required": [
+    "analysis",
+    "human_review_required",
+    "review_status"
+  ],
+  "title": "VisualAnalysisRunResult",
+  "type": "object"
+}

@@ -1,0 +1,136 @@
+{
+  "$defs": {
+    "AnalysisFrame": {
+      "properties": {
+        "frame_index": {
+          "minimum": 0,
+          "title": "Frame Index",
+          "type": "integer"
+        },
+        "pts_s": {
+          "minimum": 0,
+          "title": "Pts S",
+          "type": "number"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Roles",
+          "type": "array"
+        }
+      },
+      "required": [
+        "frame_index",
+        "pts_s",
+        "path",
+        "roles"
+      ],
+      "title": "AnalysisFrame",
+      "type": "object"
+    },
+    "TimeSpan": {
+      "properties": {
+        "start_s": {
+          "minimum": 0,
+          "title": "Start S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "start_frame": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Frame"
+        },
+        "end_frame": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Frame"
+        }
+      },
+      "required": [
+        "start_s",
+        "end_s"
+      ],
+      "title": "TimeSpan",
+      "type": "object"
+    },
+    "VisualEvidencePurpose": {
+      "enum": [
+        "entrance",
+        "internal",
+        "exit",
+        "transition"
+      ],
+      "title": "VisualEvidencePurpose",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "sequence_id": {
+      "minLength": 1,
+      "title": "Sequence Id",
+      "type": "string"
+    },
+    "purpose": {
+      "$ref": "#/$defs/VisualEvidencePurpose"
+    },
+    "window": {
+      "$ref": "#/$defs/TimeSpan"
+    },
+    "sampling_fps": {
+      "exclusiveMinimum": 0,
+      "title": "Sampling Fps",
+      "type": "number"
+    },
+    "frames": {
+      "items": {
+        "$ref": "#/$defs/AnalysisFrame"
+      },
+      "minItems": 2,
+      "title": "Frames",
+      "type": "array"
+    },
+    "contact_sheet_path": {
+      "minLength": 1,
+      "title": "Contact Sheet Path",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sequence_id",
+    "purpose",
+    "window",
+    "sampling_fps",
+    "frames",
+    "contact_sheet_path"
+  ],
+  "title": "VisualEvidenceSequence",
+  "type": "object"
+}
